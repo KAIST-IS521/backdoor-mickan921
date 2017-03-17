@@ -7,8 +7,71 @@
 #include "minivm.h"
 
 
+
 //---------------------------------------------------------
 // FUNCTION IMPLEMENTATIONS:
+
+
+void halt(struct VMContext* ctx, const uint32_t instr)
+{
+
+}
+void load(struct VMContext* ctx, const uint32_t instr)
+{
+    uint8_t reg1 = EXTRACT_B1(instr);
+    uint8_t reg2 = EXTRACT_B2(instr);
+
+}
+void store(struct VMContext* ctx, const uint32_t instr)
+{
+
+}
+void move(struct VMContext* ctx, const uint32_t instr)
+{
+
+}
+void puti(struct VMContext* ctx, const uint32_t instr)
+{
+
+}
+void add(struct VMContext* ctx, const uint32_t instr)
+{
+
+}
+void sub(struct VMContext* ctx, const uint32_t instr)
+{
+
+}
+void gt(struct VMContext* ctx, const uint32_t instr)
+{
+
+}
+void ge(struct VMContext* ctx, const uint32_t instr)
+{
+
+}
+void eq(struct VMContext* ctx, const uint32_t instr)
+{
+
+}
+void ite(struct VMContext* ctx, const uint32_t instr)
+{
+
+}
+void jump(struct VMContext* ctx, const uint32_t instr)
+{
+
+}
+void op_puts(struct VMContext* ctx, const uint32_t instr)
+{
+
+}
+void op_gets(struct VMContext* ctx, const uint32_t instr)
+{
+
+}
+
+
 
 
 // Defers decoding of register args to the called function.
@@ -34,7 +97,7 @@ void initVMContext(struct VMContext* ctx, const uint32_t numRegs, const uint32_t
 void stepVMContext(struct VMContext* ctx, uint32_t** pc) {
     // Read a 32-bit bytecode instruction.
     uint32_t instr = **pc;
-
+    //printf("inst: %u\n", instr);
     // Dispatch to an opcode-handler.
     dispatch(ctx, instr);
 

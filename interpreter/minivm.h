@@ -5,6 +5,8 @@
 //-----------------------------------------------------------------------------
 
 #include <stdint.h>
+#include <stdio.h>
+
 
 #ifndef MINIVM_H
 #define MINIVM_H
@@ -18,6 +20,8 @@
 #define MVM_NUM_FUNS 256
 
 #define MVM_NUM_REGISTERS 16 // Default
+
+#define HEAP_SIZE 8192 //Default heap memory size
 
 
 //---------------------------------------------------------
@@ -38,6 +42,11 @@ typedef struct VMContext {
     uint32_t numFuns;
     Reg* r;           // Ptr to register array.
     FunPtr* funtable; // Ptr to a funptr table.
+
+    uint32_t* pc; //Program Counter
+    uint32_t* code; //Bytecode data
+    uint32_t codeSize; //The side of the bytecode
+    uint8_t heap[HEAP_SIZE]; //The heap memory size
 } VMContext;
 
 
@@ -60,7 +69,6 @@ static FunPtr mvm_function_table[MVM_NUM_FUNS];
 //---------------------------------------------------------
 // FUNCTIONS:
 
-
 // Selects and executes an opcode function from the function pointer table.
 // Passes the entire bytecode instruction as the argument.
 // dispatch :: VMContext -> uint32_t -> Effect()
@@ -77,6 +85,23 @@ void initVMContext(struct VMContext* ctx,
 // Reads an instruction, executes it, then steps to the next instruction.
 // stepVMContext :: VMContext -> uint32_t** -> Effect()
 void stepVMContext(struct VMContext* ctx, uint32_t** pc);
+
+//---------------------------------------------------------
+// OPCODE
+void halt(struct VMContext* ctx, const uint32_t instr);
+void load(struct VMContext* ctx, const uint32_t instr);
+void store(struct VMContext* ctx, const uint32_t instr);
+void move(struct VMContext* ctx, const uint32_t instr);
+void puti(struct VMContext* ctx, const uint32_t instr);
+void add(struct VMContext* ctx, const uint32_t instr);
+void sub(struct VMContext* ctx, const uint32_t instr);
+void gt(struct VMContext* ctx, const uint32_t instr);
+void ge(struct VMContext* ctx, const uint32_t instr);
+void eq(struct VMContext* ctx, const uint32_t instr);
+void ite(struct VMContext* ctx, const uint32_t instr);
+void jump(struct VMContext* ctx, const uint32_t instr);
+void op_puts(struct VMContext* ctx, const uint32_t instr);
+void op_gets(struct VMContext* ctx, const uint32_t instr);
 
 
 //---------------------------------------------------------
