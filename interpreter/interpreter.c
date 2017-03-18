@@ -12,6 +12,9 @@
 // Global variable that indicates if the process is running.
 bool is_running = true;
 
+FILE* bytecode;
+uint32_t* code;
+
 void usageExit() {
     // TODO: show usage
     exit(1);
@@ -53,10 +56,9 @@ int main(int argc, char** argv) {
     VMContext vm;
     Reg r[NUM_REGS];
     FunPtr f[NUM_FUNCS];
-    FILE* bytecode;
-    uint32_t* pc;
+    //uint32_t* pc;
 
-    uint32_t* code;
+    
     uint32_t codeSize;
 
     // There should be at least one argument.
@@ -81,25 +83,25 @@ int main(int argc, char** argv) {
     rewind(bytecode);
 
     // Allocate heap memory
-    code = (uint32_t*)malloc(vm.codeSize + 1);
+    code = (uint32_t*)malloc(codeSize);
     if(vm.code == NULL)
     {
-        printf("No byte code\n");
+        printf("\tNo byte code\n");
+        is_running = false;
         return 1;
     }
-    fread(code, 4, vm.codeSize/4, bytecode);
-
-    // Set the program counter
-    vm.pc = (uint32_t*) &vm.code;
+    fread(code, 1, codeSize, bytecode);
+    code[codeSize + 1] = '\0';
 
     // Initialize VM context.
     initVMContext(&vm, NUM_REGS, NUM_FUNCS, r, f, code, codeSize);
 
     while (is_running) {
-        stepVMContext(&vm, &pc);
+        stepVMContext(&vm);
     }
 
     fclose(bytecode);
+    free(code);
 
     // Zero indicates normal termination.
     return 0;
