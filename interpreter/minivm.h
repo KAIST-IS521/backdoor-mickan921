@@ -6,6 +6,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 
 #ifndef MINIVM_H
@@ -46,7 +47,7 @@ typedef struct VMContext {
     uint32_t* pc; //Program Counter
     uint32_t* code; //Bytecode data
     uint32_t codeSize; //The side of the bytecode
-    uint8_t heap[HEAP_SIZE]; //The heap memory size
+    uint8_t heap[HEAP_SIZE]; //The heap memory
 } VMContext;
 
 
@@ -80,7 +81,9 @@ void initVMContext(struct VMContext* ctx,
                       const uint32_t numRegs,
                       const uint32_t numFuns,
                                 Reg* registers,
-                             FunPtr* funtable);
+                             FunPtr* funtable,
+                             uint32_t* code,
+                             uint32_t codeSize);
 
 // Reads an instruction, executes it, then steps to the next instruction.
 // stepVMContext :: VMContext -> uint32_t** -> Effect()

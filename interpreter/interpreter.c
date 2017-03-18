@@ -10,7 +10,7 @@
 #define NUM_FUNCS  (256)
 
 // Global variable that indicates if the process is running.
-static bool is_running = true;
+bool is_running = true;
 
 void usageExit() {
     // TODO: show usage
@@ -56,6 +56,8 @@ int main(int argc, char** argv) {
     FILE* bytecode;
     uint32_t* pc;
 
+    uint32_t* code;
+    uint32_t codeSize;
 
     // There should be at least one argument.
     if (argc < 2) usageExit();
@@ -64,8 +66,6 @@ int main(int argc, char** argv) {
     initRegs(r, NUM_REGS);
     // Initialize interpretation functions.
     initFuncs(f, NUM_FUNCS);
-    // Initialize VM context.
-    initVMContext(&vm, NUM_REGS, NUM_FUNCS, r, f);
 
     // Load bytecode file
     bytecode = fopen(argv[1], "rb");
@@ -77,22 +77,25 @@ int main(int argc, char** argv) {
 
     // Obtain bytecode file size:
     fseek(bytecode, 0 ,SEEK_END);
-    vm.codeSize = ftell(bytecode);
-    fseek(bytecode, 0,SEEK_SET);
+    codeSize = ftell(bytecode);
+    rewind(bytecode);
 
     // Allocate heap memory
-    vm.code = (uint32_t*)malloc(vm.codeSize + 1);
-    fread(vm.code, 4, vm.codeSize, bytecode);
-
-
-    //printf("vm.code: %p\n", (void*)&vm.code);
-    //printf("vm.codeSize: %u\n", vm.codeSize);
+    code = (uint32_t*)malloc(vm.codeSize + 1);
+    if(vm.code == NULL)
+    {
+        printf("No byte code\n");
+        return 1;
+    }
+    fread(code, 4, vm.codeSize/4, bytecode);
 
     // Set the program counter
     vm.pc = (uint32_t*) &vm.code;
 
+    // Initialize VM context.
+    initVMContext(&vm, NUM_REGS, NUM_FUNCS, r, f, code, codeSize);
+
     while (is_running) {
-        // TODO: Read 4-byte bytecode, and set the pc accordingly
         stepVMContext(&vm, &pc);
     }
 
