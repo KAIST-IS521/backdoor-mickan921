@@ -89,7 +89,7 @@ store r2, r3
 puti  r2, 0
 puts  r2
 gets r0
-; if input==user enter in password else failure
+; if input==user enter in password else failure (Below is 87)
 puti  r2, 0
 puti  r3, 117
 load  r4, r2
@@ -115,3 +115,87 @@ puti  r3, 0
 load  r4, r2
 eq    r5, r3, r4
 ite   r5, 112, 33
+; Outputs 'Password: ' (Below is 112)
+puti  r2, 0
+puti  r3, 80
+store r2, r3
+add   r2, r2, r1
+puti  r3, 97
+store r2, r3
+add   r2, r2, r1
+puti  r3, 115
+store r2, r3
+add   r2, r2, r1
+puti  r3, 115
+store r2, r3
+add   r2, r2, r1
+puti  r3, 119
+store r2, r3
+add   r2, r2, r1
+puti  r3, 111
+store r2, r3
+add   r2, r2, r1
+puti  r3, 114
+store r2, r3
+add   r2, r2, r1
+puti  r3, 100
+store r2, r3
+add   r2, r2, r1
+puti  r3, 58
+store r2, r3
+add   r2, r2, r1
+puti  r3, 32
+store r2, r3
+add   r2, r2, r1
+puti  r3, 0
+store r2, r3
+puti  r2, 0
+puts  r2
+gets r0
+; if input==password enter in success else failure (Below is 148)
+puti  r2, 0
+puti  r3, 112
+load  r4, r2
+eq    r5, r3, r4
+ite   r5, 153, 33
+add   r2, r2, r1
+puti  r3, 97
+load  r4, r2
+eq    r5, r3, r4
+ite   r5, 158, 33
+add   r2, r2, r1
+puti  r3, 115
+load  r4, r2
+eq    r5, r3, r4
+ite   r5, 163, 33
+add   r2, r2, r1
+puti  r3, 115
+load  r4, r2
+eq    r5, r3, r4
+ite   r5, 168, 33
+add   r2, r2, r1
+puti  r3, 119
+load  r4, r2
+eq    r5, r3, r4
+ite   r5, 173, 33
+add   r2, r2, r1
+puti  r3, 111
+load  r4, r2
+eq    r5, r3, r4
+ite   r5, 178, 33
+add   r2, r2, r1
+puti  r3, 114
+load  r4, r2
+eq    r5, r3, r4
+ite   r5, 183, 33
+add   r2, r2, r1
+puti  r3, 100
+load  r4, r2
+eq    r5, r3, r4
+ite   r5, 188, 33
+add   r2, r2, r1
+puti  r3, 0
+load  r4, r2
+eq    r5, r3, r4
+ite   r5, 193, 33
+jump 3
