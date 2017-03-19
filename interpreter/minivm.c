@@ -216,6 +216,7 @@ void op_gets(struct VMContext* ctx, const uint32_t instr)
         c = (uint8_t) getchar();
         if(c == '\n' || c == '\0')
         {
+            ctx->heap[ascii_string] = '\0';
             break;
         }
         if(ascii_string >= HEAP_SIZE)
