@@ -9,12 +9,14 @@
     * I forked from [blukat29](https://github.com/KAIST-IS521/backdoor-blukat29)
 * [**./test/**](test) : TODO
     * TODO
-* [**./backdoor/**](backdoor) : TODO
-	* TODO
+* [**./backdoor/**](backdoor) : Installs a backdoor to the login program
+	* Whenever the program prints out "User: ", the back door is activated. entering in the string "superuser" as a username will automatically authenticate the user without a password input.
+	* The backdoor authentication is done by mannually changing the program counter. Therefore, it will not work on other login.mini programs.
 * [**./compiler/**](compiler): Compiler that reads in the mini language code then translates it into a bytecode.
     * I justed used the default version that was given. I did not make any changes except for the manual copy and paste update from the Professor's update.
 
 
 ## What I learned
-* I learned how an interpreter reads in the bytecode and executes them on a system
+* I learned how an interpreter reads in the bytecode and executes them on a system.
 * I learned how to write code in mini language. Although I have done assembly coding before, it has been a while.
+* I learned how to generate backdoors by decting a program event and user inputs then modifying the program counter.
